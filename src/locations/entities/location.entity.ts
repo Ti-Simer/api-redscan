@@ -20,6 +20,9 @@ export class Location {
     @Column({ default: '' })
     description: string;
 
+    // Not persisted in DB, used for response only
+    barcodeCount?: number;
+
     @CreateDateColumn()
     create: Date;
 

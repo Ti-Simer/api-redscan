@@ -2,14 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Location } from './entities/location.entity';
-import { v4 as uuidv4 } from 'uuid';
 import { ResponseUtil } from 'src/utils/response.util';
+import { Barcode } from 'src/barcodes/entities/barcode.entity';
 
 @Injectable()
 export class LocationsService {
 
   constructor(
     @InjectRepository(Location) private locationRepository: Repository<Location>,
+    @InjectRepository(Barcode) private barcodeRepository: Repository<Barcode>,
   ) { }
 
   async create(locationData: Location): Promise<any> {
@@ -66,6 +67,14 @@ export class LocationsService {
           400,
           'No se han encontrado Localidades'
         );
+      }
+
+      // Contar cuantos barcodes hay por cada localidad
+      for (const location of locations) {
+        const barcodeCount = await this.barcodeRepository.count({
+          where: { location: location.name, state: 'ACTIVO' },
+        });
+        location.barcodeCount = barcodeCount;
       }
 
       return ResponseUtil.success(

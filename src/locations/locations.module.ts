@@ -3,10 +3,11 @@ import { LocationsService } from './locations.service';
 import { LocationsController } from './locations.controller';
 import { Location } from './entities/location.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Barcode } from 'src/barcodes/entities/barcode.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Location]),
+    TypeOrmModule.forFeature([Location, Barcode]),
   ],
   controllers: [LocationsController],
   providers: [LocationsService],
