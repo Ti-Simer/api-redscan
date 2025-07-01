@@ -113,7 +113,8 @@ export class BarcodesService {
     try {
       const [barcodes, total] = await this.barcodeRepository.findAndCount({
         where: {
-          state: 'ACTIVO'
+          state: 'ACTIVO',
+          location: pageData.location
         },
         skip: (pageData.page - 1) * pageData.limit,
         take: pageData.limit,
